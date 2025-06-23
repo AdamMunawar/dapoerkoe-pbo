@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="id" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Atur Profil - Dapurku</title>
+    <link rel="stylesheet" href="https://bootswatch.com/5/minty/bootstrap.min.css">
+    <link rel="stylesheet" th:href="@{/css/custom.css}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+</head>
+<body>
+<div class="container mt-4">
+    <h1>Atur Profil</h1>
+    <p>Halo, <strong th:text="${user.username}"></strong>!</p>
+    <a th:href="@{/}" class="btn btn-secondary mb-4">Kembali ke Halaman Utama</a>
+    
+    <div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}"></div>
+    <div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <h3>Update Informasi Profil</h3>
+            <form th:action="@{/profile/update}" th:object="${user}" method="post">
+                <div class="mb-3">
+                    <label for="namaLengkap" class="form-label">Nama Lengkap</label>
+                    <input type="text" id="namaLengkap" th:field="*{namaLengkap}" class="form-control">
+                </div>
+                <div class="mb-3">
+                    <label for="bio" class="form-label">Bio Singkat</label>
+                    <textarea id="bio" th:field="*{bio}" class="form-control" rows="3"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
+            </form>
+        </div>
+
+        <div class="col-md-6">
+            <h3>Ganti Password</h3>
+            <form th:action="@{/profile/change-password}" method="post">
+                <div class="mb-3">
+                    <label for="oldPassword" class="form-label">Password Lama</label>
+                    <input type="password" id="oldPassword" name="oldPassword" class="form-control" required>
+                </div>
+                <div class="mb-3">
+                    <label for="newPassword" class="form-label">Password Baru</label>
+                    <input type="password" id="newPassword" name="newPassword" class="form-control" required>
+                </div>
+                <div class="mb-3">
+                    <label for="confirmPassword" class="form-label">Konfirmasi Password Baru</label>
+                    <input type="password" id="confirmPassword" name="confirmPassword" class="form-control" required>
+                </div>
+                <button type="submit" class="btn btn-warning">Ganti Password</button>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="id" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security6">
+<head>
+    <meta charset="UTF-8">
+    <title>Form Resep - Dapurku</title>
+   <link rel="stylesheet" href="https://bootswatch.com/5/minty/bootstrap.min.css">
+   <link rel="stylesheet" th:href="@{/css/custom.css}">
+   <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+</head>
+<body>
+<div class="container my-4">
+    <h1 th:text="${resep.id == null} ? 'Tambah Resep Baru' : 'Edit Resep'">Judul</h1>
+    <hr>
+    <form th:action="@{/simpan}" th:object="${resep}" method="post" enctype="multipart/form-data">
+        <input type="hidden" th:field="*{id}" />
+
+        <div class="mb-3">
+            <label for="namaResep" class="form-label">Nama Resep</label>
+            <input type="text" th:field="*{namaResep}" class="form-control" th:classappend="${#fields.hasErrors('namaResep')} ? 'is-invalid' : ''">
+            <div class="invalid-feedback" th:errors="*{namaResep}"></div>
+        </div>
+
+        <div class="mb-3">
+            <label for="kategori" class="form-label">Kategori</label>
+            <select th:field="*{kategori}" class="form-select" th:classappend="${#fields.hasErrors('kategori')} ? 'is-invalid' : ''">
+                <option value="">-- Pilih Kategori --</option>
+                <option th:each="cat : ${listKategori}" th:value="${cat.id}" th:text="${cat.nama}"></option>
+            </select>
+            <div class="invalid-feedback" th:errors="*{kategori}"></div>
+        </div>
+
+        <div class="mb-3">
+            <label for="deskripsi" class="form-label">Deskripsi</label>
+            <textarea th:field="*{deskripsi}" class="form-control" rows="2"></textarea>
+        </div>
+
+        <div class="mb-3">
+            <label for="bahanBahan" class="form-label">Bahan-bahan</label>
+            <textarea th:field="*{bahanBahan}" class="form-control" rows="5" th:classappend="${#fields.hasErrors('bahanBahan')} ? 'is-invalid' : ''"></textarea>
+            <div class="invalid-feedback" th:errors="*{bahanBahan}"></div>
+        </div>
+
+        <div class="mb-3">
+            <label for="langkahLangkah" class="form-label">Langkah-langkah</label>
+            <textarea th:field="*{langkahLangkah}" class="form-control" rows="8" th:classappend="${#fields.hasErrors('langkahLangkah')} ? 'is-invalid' : ''"></textarea>
+            <div class="invalid-feedback" th:errors="*{langkahLangkah}"></div>
+        </div>
+
+        <div class="mb-3">
+            <label for="fileGambar" class="form-label">Gambar Resep</label>
+            <input type="file" name="fileGambar" id="fileGambar" class="form-control">
+            <div th:if="${uploadError}" class="text-danger" th:text="${uploadError}"></div>
+        </div>
+<div class="mb-3 text-center">
+    <img id="imagePreview" src="#" alt="Pratinjau Gambar" class="img-fluid rounded" style="max-height: 250px; display: none;"/>
+</div>
+        <button type="submit" class="btn btn-primary">Simpan</button>
+        <a th:href="@{/}" class="btn btn-secondary">Batal</a>
+    </form>
+</div>
+<script>
+function previewImage() {
+    const imageInput = document.getElementById('fileGambar');
+    const imagePreview = document.getElementById('imagePreview');
+
+    if (imageInput.files && imageInput.files[0]) {
+        const reader = new FileReader();
+
+        reader.onload = function(e) {
+            imagePreview.src = e.target.result;
+            imagePreview.style.display = 'block';
+        }
+
+        reader.readAsDataURL(imageInput.files[0]);
+    }
+}
+</script>
+</body>
+</html>

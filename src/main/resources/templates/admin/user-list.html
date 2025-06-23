@@ -1,0 +1,16 @@
+<div class="container mt-4">
+    <h1>Daftar Pengguna</h1>
+    <a th:href="@{/admin/dashboard}" class="btn btn-secondary mb-3">Kembali ke Dashboard</a>
+    <table class="table table-bordered table-striped">
+        <thead class="table-dark">
+            <tr><th>ID</th><th>Username</th><th>Peran (Roles)</th></tr>
+        </thead>
+        <tbody>
+            <tr th:each="user : ${users}">
+                <td th:text="${user.id}"></td>
+                <td th:text="${user.username}"></td>
+                <td th:text="${user.roles}"></td>
+            </tr>
+        </tbody>
+    </table>
+</div>

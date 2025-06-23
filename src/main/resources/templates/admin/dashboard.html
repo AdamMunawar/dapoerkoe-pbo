@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="id" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Admin Dashboard - Dapurku</title>
+ <link rel="stylesheet" href="https://bootswatch.com/5/minty/bootstrap.min.css">
+ <link rel="stylesheet" th:href="@{/css/custom.css}">
+ <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+</head>
+<body>
+<div class="container mt-4">
+    <h1>Admin Dashboard</h1>
+    <p>Selamat datang di panel admin.</p>
+    <div class="list-group">
+        <a th:href="@{/admin/users}" class="list-group-item list-group-item-action">Lihat Daftar Pengguna</a>
+        <a th:href="@{/admin/recipes}" class="list-group-item list-group-item-action">Lihat Semua Resep</a>
+        <a th:href="@{/}" class="list-group-item list-group-item-action mt-3">Kembali ke Halaman Utama</a>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,16 @@
+/* src/main/resources/static/css/custom.css */
+
+body {
+    font-family: 'Poppins', sans-serif;
+}
+
+.navbar-brand, h1, h2, h3 {
+    font-family: 'Lobster', cursive;
+}
+
+/* Efek hover untuk kartu resep */
+.card-resep:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+    transition: all 0.3s ease-in-out;
+}

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="id" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security6">
+<head>
+    <meta charset="UTF-8">
+    <title>Dapurku - Manajemen Resep</title>
+    <link rel="stylesheet" href="https://bootswatch.com/5/minty/bootstrap.min.css">
+    <link rel="stylesheet" th:href="@{/css/custom.css}">    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" th:href="@{/}">Dapoer-koe</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item" sec:authorize="hasAuthority('ROLE_ADMIN')">
+                    <a class="nav-link" th:href="@{/admin/dashboard}">Panel Admin</a>
+                </li>
+                <li class="nav-item" sec:authorize="isAuthenticated()">
+                </li>
+            </ul>
+            <div class="d-flex">
+                <span class="navbar-text me-3" sec:authorize="isAuthenticated()">
+                    Halo, <a th:href="@{/profile}" class="text-white" style="text-decoration: none;">
+                        <strong sec:authentication="name"></strong>
+                    </a>
+                </span>
+                <form th:action="@{/logout}" method="post" sec:authorize="isAuthenticated()">
+                    <button class="btn btn-outline-light" type="submit">Logout</button>
+                </form>
+                <a th:href="@{/login}" class="btn btn-outline-light" sec:authorize="isAnonymous()">Login</a>
+            </div>
+        </div>
+    </div>
+</nav>
+<div class="p-5 mb-4 bg-light rounded-3 text-center">
+    <div class="container-fluid py-5">
+        <h1 class="display-5 fw-bold">Selamat Datang di Dapoer-koe!</h1>
+        <p class="fs-4">Temukan dan bagikan resep masakan terbaik Anda di sini. Mulai petualangan memasakmu sekarang!</p>
+        <a th:href="@{/tambah}" class="btn btn-primary btn-lg" type="button">
+            <i class="fas fa-plus me-2"></i>Buat Resep Pertamamu
+        </a>
+    </div>
+</div>
+
+<div class="container my-4">
+    <h2 class="mb-4 text-center">Daftar Resep Makanan</h2>
+    
+    <div th:if="${param.error}" class="alert alert-danger">Anda tidak punya hak akses untuk aksi tersebut.</div>
+
+    <form th:action="@{/}" method="get" class="row g-3 mb-4 justify-content-center">
+        <div class="col-auto">
+            <input type="text" name="keyword" th:value="${keyword}" class="form-control" placeholder="Cari resep...">
+        </div>
+        <div class="col-auto">
+            <button type="submit" class="btn btn-info">
+                <i class="fas fa-search"></i> Cari
+            </button>
+             <a th:href="@{/tambah}" class="btn btn-primary">
+    <i class="fas fa-plus me-1"></i> Tambah Resep
+</a>
+        </div>
+    </form>
+
+    <div class="row">
+
+        <div th:if="${#lists.isEmpty(listResep)}" class="text-center col-12">
+            <p class="fs-5">Belum ada resep yang diupload.</p>
+            <p>Jadilah yang pertama! <a th:href="@{/tambah}" class="btn btn-sm btn-success">
+                <i class="fas fa-plus"></i> Tambahkan Resep</a>
+            </p>
+        </div>
+
+        <div class="col-md-4 mb-4" th:each="resep : ${listResep}">
+            <div class="card h-100 card-resep"> 
+                <img th:if="${resep.namaGambar != null}" th:src="@{'/uploaded-images/' + ${resep.namaGambar}}" class="card-img-top" style="height: 200px; object-fit: cover;" alt="Gambar Resep">
+                <img th:if="${resep.namaGambar == null}" th:src="@{/images/placeholder.png}" class="card-img-top" style="height: 200px; object-fit: cover;" alt="Placeholder">
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title" th:text="${resep.namaResep}">Nama Resep</h5>
+                    <h6 class="card-subtitle mb-2 text-muted" th:text="${resep.kategori.nama}">Kategori</h6>
+                    <small class="text-muted mb-2">oleh <span th:text="${resep.user.username}">User</span></small>
+                    <p class="card-text" th:text="${resep.deskripsi}">Deskripsi singkat.</p>
+                    <div class="mt-auto" sec:authorize="isAuthenticated()" th:if="${#authentication.name == resep.user.username}">
+                        <a th:href="@{/edit/{id}(id=${resep.id})}" class="btn btn-sm btn-success">
+                            <i class="fas fa-edit"></i> Edit
+                        </a>
+                        <a th:href="@{/hapus/{id}(id=${resep.id})}" onclick="return confirm('Yakin ingin menghapus?')" class="btn btn-sm btn-danger">
+                            <i class="fas fa-trash"></i> Hapus
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+</body>
+</html>
