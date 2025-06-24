@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="id" xmlns:th="http://www.thymeleaf.org">
+<head><title>Form Kategori</title><link rel="stylesheet" href="https://bootswatch.com/5/minty/bootstrap.min.css"></head>
+<body>
+<div class="container mt-4">
+    <h1 th:text="${kategori.id == null} ? 'Tambah Kategori' : 'Edit Kategori'">Form Kategori</h1>
+   <form action="#" th:action="@{/admin/kategori/simpan}" th:object="${kategori}" method="post" enctype="multipart/form-data">
+    <input type="hidden" th:field="*{id}">
+    
+    <div th:if="${kategori.namaGambar != null}" class="mb-3 text-center">
+        <img th:src="@{'/uploaded-images/' + ${kategori.namaGambar}}" alt="Gambar Kategori" style="max-height: 150px;" class="img-thumbnail">
+    </div>
+
+    <div class="mb-3">
+        <label for="nama" class="form-label">Nama Kategori</label>
+        <input type="text" th:field="*{nama}" class="form-control" id="nama" required>
+    </div>
+
+    <div class="mb-3">
+        <label for="fileGambar" class="form-label">Gambar Kategori</label>
+        <input type="file" name="fileGambar" id="fileGambar" class="form-control">
+        <small class="form-text text-muted">Kosongkan jika tidak ingin mengubah gambar.</small>
+    </div>
+    
+    <button type="submit" class="btn btn-primary">Simpan</button>
+    <a th:href="@{/admin/kategori}" class="btn btn-secondary">Batal</a>
+</form>
+</div>
+</body>
+</html>

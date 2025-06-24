@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="id" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security6">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${resep.namaResep} + ' - Dapoer-koe'"></title>
+    <link rel="stylesheet" href="https://bootswatch.com/5/minty/bootstrap.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/css/custom.css}">
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+</head>
+<body>
+
+<div th:replace="~{index :: nav}"></div>
+
+<div class="container my-5">
+    <div class="row">
+        <div class="col-lg-8 offset-lg-2">
+            <h1 class="display-4" th:text="${resep.namaResep}">Nama Resep</h1>
+            <p class="lead text-muted">
+                Kategori: <span th:text="${resep.kategori.nama}">Kategori</span> |
+                Oleh: <span th:text="${resep.user.username}">User</span>
+            </p>
+            <hr>
+
+            <div class="d-flex align-items-center mb-4">
+                <button id="like-button" class="btn btn-danger" th:data-resep-id="${resep.id}" sec:authorize="isAuthenticated()">
+                    <th:block th:if="${#lists.contains(resep.likes.![username], #authentication.name)}">
+                        <i class="fas fa-heart"></i> Batal Suka
+                    </th:block>
+                    <th:block th:unless="${#lists.contains(resep.likes.![username], #authentication.name)}">
+                        <i class="far fa-heart"></i> Suka
+                    </th:block>
+                </button>
+                <span id="like-count" class="ms-3 fw-bold" th:text="${#lists.size(resep.likes)} + ' Suka'">0 Suka</span>
+            </div>
+
+            <img th:if="${resep.namaGambar != null}" th:src="@{'/uploaded-images/' + ${resep.namaGambar}}" class="img-fluid rounded shadow-sm mb-4" alt="Gambar Resep">
+
+            <p class="fs-5" th:text="${resep.deskripsi}">Deskripsi resep.</p>
+
+            <div class="card my-4">
+                <div class="card-header">
+                    <h4><i class="fas fa-shopping-basket me-2"></i>Bahan-bahan</h4>
+                </div>
+               <div class="card-body">
+                <p th:utext="${resep.getBahanBahanAsHtml()}"></p>
+                </div>
+            </div>
+
+            <div class="card my-4">
+                <div class="card-header">
+                    <h4><i class="fas fa-shoe-prints me-2"></i>Langkah-langkah</h4>
+                </div>
+                <div class="card-body">
+                 <p th:utext="${resep.getLangkahLangkahAsHtml()}"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div th:replace="~{fragments :: footer-section}"></div>
+<script th:src="@{/js/like.js}"></script> </body>
+</html>

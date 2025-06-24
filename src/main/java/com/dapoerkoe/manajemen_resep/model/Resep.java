@@ -1,19 +1,26 @@
-package com.dapoerkoe.manajemen_resep.model;
+package com.dapoerkoe.manajemen_resep.model; // Pastikan package ini sesuai
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.*;
-import lombok.Getter;
-import lombok.Setter;
 
-@Getter // Tambahkan ini
-@Setter // Tambahkan ini
+import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
+
+import org.hibernate.annotations.CreationTimestamp;
+
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @Entity
 @Table(name = "resep")
 public class Resep {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -22,6 +29,7 @@ public class Resep {
     @Size(min = 3, message = "Nama resep minimal 3 karakter")
     private String namaResep;
 
+    @Lob
     private String deskripsi;
 
     @NotBlank(message = "Bahan-bahan tidak boleh kosong")
@@ -42,4 +50,32 @@ public class Resep {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
+
+    @ManyToMany
+    @JoinTable(
+            name = "resep_likes",
+            joinColumns = @JoinColumn(name = "resep_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
+    @Builder.Default // <-- INI ADALAH PERBAIKANNYA
+    private Set<User> likes = new HashSet<>();
+    
+    @CreationTimestamp
+    @Column(nullable = false, updatable = false)
+    private LocalDateTime createdAt;
+    
+    // Metode helper untuk konversi newline ke <br>
+    public String getBahanBahanAsHtml() {
+        if (this.bahanBahan == null) {
+            return "";
+        }
+        return this.bahanBahan.replaceAll("\n", "<br/>");
+    }
+
+    public String getLangkahLangkahAsHtml() {
+        if (this.langkahLangkah == null) {
+            return "";
+        }
+        return this.langkahLangkah.replaceAll("\n", "<br/>");
+    }
 }

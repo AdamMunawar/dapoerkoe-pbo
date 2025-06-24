@@ -19,6 +19,7 @@ public class SecurityConfig {
                 
                 .requestMatchers("/admin/**").hasAuthority("ROLE_ADMIN")
                 .requestMatchers("/tambah", "/edit/**", "/hapus/**", "/simpan", "/profile/**").hasAuthority("ROLE_USER")
+                .requestMatchers("/resep/*/like").hasAuthority("ROLE_USER")
                 .anyRequest().authenticated()
             )
             .formLogin(form -> form

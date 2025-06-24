@@ -3,8 +3,6 @@ package com.dapoerkoe.manajemen_resep.model;
 import jakarta.persistence.*;
 import lombok.*;
 import java.util.Set;
-import lombok.Getter;
-import lombok.Setter;
 
 @Getter // Tambahkan ini
 @Setter // Tambahkan ini
@@ -23,4 +21,6 @@ public class Kategori {
 
     @OneToMany(mappedBy = "kategori")
     private Set<Resep> resep;
+
+    private String namaGambar;
 }

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="id" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security6">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="'Resep Kategori ' + ${namaKategori}"></title>
+    <link rel="stylesheet" href="https://bootswatch.com/5/minty/bootstrap.min.css">
+    <link rel="stylesheet" th:href="@{/css/custom.css}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+</head>
+<body>
+    <nav th:replace="~{index :: nav}"></nav> <div class="container my-5">
+        <h1 class="text-center mb-4">Resep dalam Kategori: <span class="fw-bold" th:text="${namaKategori}">Nama Kategori</span></h1>
+
+        <div class="row">
+            <div th:if="${#lists.isEmpty(listResep)}" class="text-center col-12">
+                <p class="fs-5">Belum ada resep dalam kategori ini.</p>
+            </div>
+
+            <div class="col-md-4 mb-4" th:each="resep : ${listResep}">
+                <div class="card h-100 card-resep">
+                    <a th:href="@{/resep/{id}(id=${resep.id})}">
+                        <img th:if="${resep.namaGambar != null}" th:src="@{'/uploaded-images/' + ${resep.namaGambar}}" class="card-img-top" style="height: 200px; object-fit: cover;" alt="Gambar Resep">
+                        <img th:if="${resep.namaGambar == null}" th:src="@{/images/placeholder.png}" class="card-img-top" style="height: 200px; object-fit: cover;" alt="Placeholder">
+                    </a>
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title">
+                            <a th:href="@{/resep/{id}(id=${resep.id})}" th:text="${resep.namaResep}" class="text-dark text-decoration-none">Nama Resep</a>
+                        </h5>
+                        <small class="text-muted mb-2">oleh <span th:text="${resep.user.username}">User</span></small>
+                        <p class="card-text" th:text="${resep.deskripsi}">Deskripsi singkat.</p>
+                        <div class="mt-auto" sec:authorize="isAuthenticated()" th:if="${#authentication.name == resep.user.username}">
+                            <a th:href="@{/edit/{id}(id=${resep.id})}" class="btn btn-sm btn-outline-primary"><i class="fas fa-edit"></i> Edit</a>
+                            <a th:href="@{/hapus/{id}(id=${resep.id})}" onclick="return confirm('Yakin ingin menghapus?')" class="btn btn-sm btn-outline-danger"><i class="fas fa-trash"></i> Hapus</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<div th:replace="~{fragments :: footer-section}"></div>
+</body>
+</html>

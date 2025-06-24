@@ -1,16 +1,40 @@
+<!DOCTYPE html>
+<html lang="id" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security6">
+<head>
+    <meta charset="UTF-8">
+    <title>Manajemen Pengguna</title>
+    <link rel="stylesheet" href="https://bootswatch.com/5/minty/bootstrap.min.css">
+</head>
+<body>
 <div class="container mt-4">
     <h1>Daftar Pengguna</h1>
+    <a th:href="@{/admin/users/tambah}" class="btn btn-primary mb-3">Tambah User Baru</a>
     <a th:href="@{/admin/dashboard}" class="btn btn-secondary mb-3">Kembali ke Dashboard</a>
+    
+    <div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}"></div>
+
     <table class="table table-bordered table-striped">
         <thead class="table-dark">
-            <tr><th>ID</th><th>Username</th><th>Peran (Roles)</th></tr>
+            <tr><th>ID</th><th>Username</th><th>Nama Lengkap</th><th>Peran</th><th>Aksi</th></tr>
         </thead>
         <tbody>
             <tr th:each="user : ${users}">
                 <td th:text="${user.id}"></td>
                 <td th:text="${user.username}"></td>
+                <td th:text="${user.namaLengkap}"></td>
                 <td th:text="${user.roles}"></td>
+                <td>
+                    <a th:href="@{/admin/users/edit/{id}(id=${user.id})}" class="btn btn-sm btn-success">Edit</a>
+                    <a th:if="${#authentication.name != user.username}"
+                       th:href="@{/admin/users/hapus/{id}(id=${user.id})}"
+                       class="btn btn-sm btn-danger"
+                       onclick="return confirm('PERINGATAN: Menghapus user ini akan menghapus SEMUA resep yang telah dibuatnya. Lanjutkan?')">
+                       Hapus
+                    </a>
+                </td>
             </tr>
         </tbody>
     </table>
 </div>
+</body>
+</html>

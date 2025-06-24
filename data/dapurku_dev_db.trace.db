@@ -1,0 +1,3 @@
+2025-06-24 17:02:30.245519+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DESKRIPSI CHARACTER VARYING(255)": "'Surabi, atau sering juga disebut serabi, adalah jajanan pasar tradisional Indon... (594)"; SQL statement:
+insert into resep (bahan_bahan,created_at,deskripsi,kategori_id,langkah_langkah,nama_gambar,nama_resep,user_id,id) values (?,?,?,?,?,?,?,?,default) [22001-232]

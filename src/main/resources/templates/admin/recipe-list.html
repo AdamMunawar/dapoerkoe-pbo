@@ -1,17 +1,32 @@
+<!DOCTYPE html>
+<html lang="id" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Manajemen Resep</title>
+    <link rel="stylesheet" href="https://bootswatch.com/5/minty/bootstrap.min.css">
+</head>
+<body>
 <div class="container mt-4">
-    <h1>Semua Resep</h1>
+    <h1>Manajemen Semua Resep</h1>
+    <a th:href="@{/admin/recipes/tambah}" class="btn btn-primary mb-3">Tambah Resep (sebagai Admin)</a>
     <a th:href="@{/admin/dashboard}" class="btn btn-secondary mb-3">Kembali ke Dashboard</a>
+    
     <table class="table table-bordered table-striped">
         <thead class="table-dark">
-            <tr><th>ID</th><th>Nama Resep</th><th>Pembuat (User)</th><th>Kategori</th></tr>
+            <tr><th>ID</th><th>Nama Resep</th><th>Pembuat</th><th>Aksi</th></tr>
         </thead>
         <tbody>
             <tr th:each="resep : ${recipes}">
                 <td th:text="${resep.id}"></td>
                 <td th:text="${resep.namaResep}"></td>
                 <td th:text="${resep.user.username}"></td>
-                <td th:text="${resep.kategori.nama}"></td>
+                <td>
+                    <a th:href="@{/admin/recipes/edit/{id}(id=${resep.id})}" class="btn btn-sm btn-success">Edit</a>
+                    <a th:href="@{/admin/recipes/hapus/{id}(id=${resep.id})}" class="btn btn-sm btn-danger" onclick="return confirm('Yakin ingin menghapus resep ini?')">Hapus</a>
+                </td>
             </tr>
         </tbody>
     </table>
 </div>
+</body>
+</html>

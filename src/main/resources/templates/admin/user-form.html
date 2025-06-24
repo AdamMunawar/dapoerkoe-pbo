@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="id" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Form Pengguna</title>
+    <link rel="stylesheet" href="https://bootswatch.com/5/minty/bootstrap.min.css">
+</head>
+<body>
+<div class="container mt-4">
+    <h1 th:text="${userDto.id == null} ? 'Tambah Pengguna Baru' : 'Edit Pengguna'">Form Pengguna</h1>
+    <hr>
+    <form th:action="@{/admin/users/simpan}" th:object="${userDto}" method="post">
+        <input type="hidden" th:field="*{id}">
+        
+        <div class="mb-3">
+            <label for="username" class="form-label">Username</label>
+            <input type="text" th:field="*{username}" class="form-control" required>
+        </div>
+        <div class="mb-3">
+            <label for="namaLengkap" class="form-label">Nama Lengkap</label>
+            <input type="text" th:field="*{namaLengkap}" class="form-control">
+        </div>
+        <div class="mb-3">
+            <label for="email" class="form-label">Email</label>
+            <input type="email" th:field="*{email}" class="form-control">
+        </div>
+        <div class="mb-3">
+            <label for="noTelepon" class="form-label">Nomor Telepon</label>
+            <input type="text" th:field="*{noTelepon}" class="form-control">
+        </div>
+        <div class="mb-3">
+            <label for="password" class="form-label">Password</label>
+            <input type="password" th:field="*{password}" class="form-control" th:required="${userDto.id == null}">
+            <small class="form-text text-muted" th:if="${userDto.id != null}">Kosongkan jika tidak ingin mengubah password.</small>
+        </div>
+         <div class="mb-3">
+            <label for="roles" class="form-label">Peran (Pisahkan dengan koma)</label>
+            <input type="text" th:field="*{roles}" class="form-control" required placeholder="Contoh: ROLE_USER atau ROLE_ADMIN,ROLE_USER">
+        </div>
+
+        <button type="submit" class="btn btn-primary">Simpan</button>
+        <a th:href="@{/admin/users}" class="btn btn-secondary">Batal</a>
+    </form>
+</div>
+</body>
+</html>

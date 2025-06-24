@@ -60,6 +60,8 @@
         <button type="submit" class="btn btn-primary">Simpan</button>
         <a th:href="@{/}" class="btn btn-secondary">Batal</a>
     </form>
+    <form th:action="@{${postUrl}}" th:object="${resep}" method="POST" enctype="multipart/form-data">
+    </form>
 </div>
 <script>
 function previewImage() {
