@@ -72,4 +72,10 @@ public class ProfileController {
         redirectAttributes.addFlashAttribute("successMessage", "Password berhasil diubah.");
         return "redirect:/profile";
     }
+    @GetMapping("/resep-disimpan")
+    public String viewSavedRecipes(Model model, @AuthenticationPrincipal UserDetails userDetails) {
+    User currentUser = getCurrentUser(userDetails);
+    model.addAttribute("listResep", currentUser.getResepDisimpan());
+    return "resep-disimpan";
+}
 }

@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
+import org.hibernate.Hibernate;
 
 import java.io.IOException;
 import java.nio.file.*;
@@ -66,6 +67,19 @@ public class ResepService {
             resep.getLikes().add(user);
         }
     }
+    @Transactional(readOnly = true)
+    public Optional<Resep> findByIdWithDetails(Long id) {
+    Optional<Resep> resepOpt = resepRepository.findById(id);
+    
+    // "Paksa" Hibernate untuk mengambil data relasi saat sesi database masih terbuka
+    resepOpt.ifPresent(resep -> {
+        Hibernate.initialize(resep.getKategori());
+        Hibernate.initialize(resep.getUser());
+        Hibernate.initialize(resep.getLikes());
+    });
+    
+    return resepOpt;
+}
 
     public List<Resep> findTop4Popular() {
         return resepRepository.findTopPopular(PageRequest.of(0, 4));

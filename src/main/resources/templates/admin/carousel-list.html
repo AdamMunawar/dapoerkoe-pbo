@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="id" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Hero Carousel</title>
+    <link rel="stylesheet" href="https://bootswatch.com/5/minty/bootstrap.min.css">
+</head>
+<body>
+<div class="container mt-4">
+    <h1>Hero Carousel</h1>
+    <a th:href="@{/admin/carousel/tambah}" class="btn btn-primary mb-3">Tambah Slide Baru</a>
+    <table class="table table-bordered">
+        <thead><tr><th>Gambar</th><th>Judul</th><th>Urutan</th><th>Status</th><th>Aksi</th></tr></thead>
+        <tbody>
+            <tr th:each="slide : ${slides}">
+                <td><img th:src="@{'/uploaded-images/hero/' + ${slide.namaGambar}}" width="150" alt="slide"></td>
+                <td th:text="${slide.judul}"></td>
+                <td th:text="${slide.urutanTampil}"></td>
+                <td><span th:text="${slide.aktif} ? 'Aktif' : 'Non-Aktif'" th:classappend="${slide.aktif} ? 'badge bg-success' : 'badge bg-secondary'"></span></td>
+                <td>
+                    <a th:href="@{/admin/carousel/edit/{id}(id=${slide.id})}" class="btn btn-sm btn-success">Edit</a>
+                    <a th:href="@{/admin/carousel/hapus/{id}(id=${slide.id})}" class="btn btn-sm btn-danger" onclick="return confirm('Yakin?')">Hapus</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+</body></html>

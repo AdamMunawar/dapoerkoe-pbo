@@ -1,155 +1,213 @@
 <!DOCTYPE html>
 <html lang="id" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security6">
+
 <head>
     <meta charset="UTF-8">
     <title>Dapurku - Manajemen Resep</title>
+
     <link rel="stylesheet" href="https://bootswatch.com/5/minty/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
     <link rel="stylesheet" th:href="@{/css/custom.css}">
+    <link rel="stylesheet" th:href="@{/css/sidebar.css}">
 </head>
+
 <body>
 
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary sticky-top">
-    <div class="container-fluid">
-        <a class="navbar-brand" th:href="@{/}">Dapoer-koe</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-            <span class="navbar-toggler-icon"></span>
-        </button>
+    <div class="d-flex" id="wrapper">
 
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <form th:action="@{/}" method="get" class="d-flex mx-auto" role="search">
-                <input type="text" name="keyword" th:value="${keyword}" class="form-control me-2" placeholder="Cari resep..." style="width: 350px;">
-                <button type="submit" class="btn btn-outline-light">
-                    <i class="fas fa-search"></i>
-                </button>
-            </form>
-
-            <div class="d-flex align-items-center ms-auto">
-                <a th:href="@{/tambah}" class="btn btn-light me-3" sec:authorize="isAuthenticated()">
-                    <i class="fas fa-plus me-1"></i> Tambah Resep
-                </a>
-                
-                <span class="navbar-text me-3" sec:authorize="isAuthenticated()">
-                    Halo, <a th:href="@{/profile}" class="text-white fw-bold" style="text-decoration: none;">
-                        <strong sec:authentication="name"></strong>
-                    </a>
-                </span>
-
-                <form th:action="@{/logout}" method="post" sec:authorize="isAuthenticated()">
-                    <button class="btn btn-outline-warning" type="submit">Logout</button>
-                </form>
-
-                <a th:href="@{/login}" class="btn btn-light" sec:authorize="isAnonymous()">Login</a>
+        <aside class="bg-light border-end" id="sidebar-wrapper">
+            <div class="sidebar-heading border-bottom">
+                <a class="text-dark text-decoration-none" th:href="@{/}">Dapoer-koe</a>
             </div>
-        </div>
-    </div>
-</nav>
-
-<div class="p-5 mb-4 bg-light rounded-0 text-center" sec:authorize="isAnonymous()">
-    <div class="container-fluid py-5">
-        <h1 class="display-5 fw-bold">Selamat Datang di Dapoer-koe!</h1>
-        <p class="fs-4">Temukan dan bagikan resep masakan terbaik Anda di sini. Mulai petualangan memasakmu sekarang!</p>
-        <a th:href="@{/register}" class="btn btn-primary btn-lg" type="button">
-            <i class="fas fa-user-plus me-2"></i>Daftar Sekarang
-        </a>
-    </div>
-</div>
-
-<div class="p-5 mb-4 bg-dark text-white rounded-0 text-center" sec:authorize="hasAuthority('ROLE_ADMIN')">
-    <div class="container-fluid py-5">
-        <h1 class="display-5 fw-bold">Selamat Datang, Administrator!</h1>
-        <p class="fs-4">Anda memiliki akses penuh untuk mengelola konten dan pengguna di Dapoer-koe.</p>
-        <a th:href="@{/admin/dashboard}" class="btn btn-danger btn-lg" type="button">
-            <i class="fas fa-user-shield me-2"></i>Masuk ke Panel Admin
-        </a>
-    </div>
-</div>
-
-<div class="container my-5"th:if="${!#lists.isEmpty(resepPopuler)}">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="fw-bold">Resep Populer</h2>
-            </div>
-    
-    <div class="row g-3 justify-content-center">
-    
-        <div class="col-6 col-md-3" th:each="populer : ${resepPopuler}">
-            <a th:href="@{/resep/{id}(id=${populer.id})}" class="text-decoration-none">
-                <div class="card card-resep h-100">
-                    <img th:if="${populer.namaGambar != null}" th:src="@{'/uploaded-images/' + ${populer.namaGambar}}" class="card-img-top" style="height: 150px; object-fit: cover;" alt="Gambar Populer">
-                    <img th:if="${populer.namaGambar == null}" th:src="@{/images/placeholder.png}" class="card-img-top" style="height: 150px; object-fit: cover;" alt="Placeholder">
-                    <div class="card-body">
-                        <h6 class="card-title text-dark" th:text="${populer.namaResep}">Nama Resep</h6>
-                    </div>
-                    <div class="card-footer text-muted">
-                        <i class="fas fa-heart text-danger"></i>
-                        <span th:text="${#lists.size(populer.likes)}">0</span> Suka
-                    </div>
-                </div>
-            </a>
-        </div>
-        
-    </div>
-    <hr class="my-5">
-</div>
-
-<div class="container my-5"  th:if="${!#lists.isEmpty(resepTerbaru)}">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-    <h2 class="fw-bold">Resep Terbaru</h2>
-    </div>
-    <div class="row g-4 justify-content-center">
-        <div class="col-12 col-md-6 col-lg-3 mb-4" th:each="resep : ${resepTerbaru}">
-            <div class="card h-100 card-resep">
-                <a th:href="@{/resep/{id}(id=${resep.id})}">
-                    <img th:if="${resep.namaGambar != null}" th:src="@{'/uploaded-images/' + ${resep.namaGambar}}" class="card-img-top" style="height: 200px; object-fit: cover;" alt="Gambar Resep">
-                    <img th:if="${resep.namaGambar == null}" th:src="@{/images/placeholder.png}" class="card-img-top" style="height: 200px; object-fit: cover;" alt="Placeholder">
-                </a>
-                <div class="card-body d-flex flex-column">
-                    <h5 class="card-title">
-                        <a th:href="@{/resep/{id}(id=${resep.id})}" th:text="${resep.namaResep}" class="text-dark text-decoration-none">Nama Resep</a>
-                    </h5>
-                    <small class="text-muted mb-2">oleh <span th:text="${resep.user.username}">User</span></small>
-                    <div class="mt-auto">
-                        <span class="badge bg-primary" th:text="${resep.kategori.nama}">Kategori</span>
-                    </div>
+            <div class="list-group list-group-flush">
+                <a th:href="@{/}" class="list-group-item list-group-item-action"><i class="fas fa-home fa-fw me-2"></i>Beranda</a>
+                <a th:href="@{/kategori/all}" class="list-group-item list-group-item-action"><i class="fas fa-tags fa-fw me-2"></i>Kategori</a>
+                <a th:href="@{/tambah}" class="list-group-item list-group-item-action"><i class="fas fa-plus fa-fw me-2"></i>Tambah Resep</a>
+                <a th:href="@{/profile/resep-disimpan}" class="list-group-item list-group-item-action"><i class="fas fa-bookmark fa-fw me-2"></i>Resep Disimpan</a>
+                <div sec:authorize="hasAuthority('ROLE_ADMIN')">
+                    <hr class="mx-3">
+                    <a th:href="@{/admin/dashboard}" class="list-group-item list-group-item-action list-group-item-danger"><i class="fas fa-user-shield fa-fw me-2"></i>Panel Admin</a>
                 </div>
             </div>
-        </div>
-    </div>
-    <hr class="my-5">
-</div>
+        </aside>
 
-<div class="container my-5">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h3 class="fw-bold">Berdasarkan Kategori</h3>
-        <a href="#" class="text-decoration-none">Lihat Semua &rarr;</a>
-    </div>
-
-    <div class="row g-3 justify-content-center">
-
-        <div class="col-6 col-md-3" th:each="cat : ${listKategori.subList(0, T(java.lang.Math).min(4, listKategori.size()))}">
-            <a th:href="@{/kategori/{nama}(nama=${cat.nama})}" class="text-decoration-none">
-                
-                <div class="card card-resep h-100">
-                    <img th:if="${cat.namaGambar != null}" th:src="@{'/uploaded-images/' + ${cat.namaGambar}}" class="card-img-top" style="height: 150px; object-fit: cover;" alt="Gambar Kategori">
-                    <img th:if="${cat.namaGambar == null}" th:src="@{/images/placeholder.png}" class="card-img-top" style="height: 150px; object-fit: cover;" alt="Placeholder">
-                    
-                    <div class="card-body">
-                        <h6 class="card-title text-dark fw-bold" th:text="${cat.nama}">Nama Kategori</h6>
+        <div id="page-content-wrapper">
+            <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom sticky-top">
+                <div class="container-fluid">
+                    <button class="btn btn-primary" id="menu-toggle"><i class="fas fa-bars"></i></button>
+                    <div class="d-flex align-items-center ms-auto">
+                        <form th:action="@{/search}" method="get" class="d-flex me-3" role="search">
+                            <input type="text" name="keyword" class="form-control" placeholder="Cari resep...">
+                            <button type="submit" class="btn btn-outline-primary ms-1"><i class="fas fa-search"></i></button>
+                        </form>
+                        <span class="navbar-text me-3" sec:authorize="isAuthenticated()">
+                            <a th:href="@{/profile}" class="text-decoration-none text-dark">Halo, <strong sec:authentication="name" class="text-primary"></strong></a>
+                        </span>
+                        <form th:action="@{/logout}" method="post" sec:authorize="isAuthenticated()">
+                            <button class="btn btn-outline-danger" type="submit">Logout</button>
+                        </form>
+                        <a th:href="@{/login}" class="btn btn-primary" sec:authorize="isAnonymous()">Login</a>
                     </div>
-                    
-                    <div class="card-footer text-muted">
-                        <i class="fas fa-book-open"></i>
-                        <span th:text="${#lists.size(cat.resep)}">0</span> Resep
+                </div>
+            </nav>
+
+            <main>
+                <div th:if="${slides != null and !slides.isEmpty()}">
+                    <div id="heroCarousel" class="carousel slide hero-carousel" data-bs-ride="carousel">
+                        <div class="carousel-indicators">
+                            <button type="button" data-bs-target="#heroCarousel" th:each="slide, loop : ${slides}" th:data-bs-slide-to="${loop.index}" th:classappend="${loop.first} ? 'active' : ''"></button>
+                        </div>
+                        <div class="carousel-inner">
+                            <div class="carousel-item" th:each="slide, loop : ${slides}" th:classappend="${loop.first} ? 'active' : ''">
+                                <img th:src="@{'/uploaded-images/hero/' + ${slide.namaGambar}}" class="d-block w-100" alt="Carousel Image">
+                            </div>
+                        </div>
+                        <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Previous</span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Next</span>
+                        </button>
                     </div>
                 </div>
 
-            </a>
+                <div class="container my-5" th:if="${!#lists.isEmpty(resepPopuler)}">
+                    <h2 class="fw-bold mb-4">Resep Populer</h2>
+                    <div class="row g-3 justify-content-center">
+                        <div class="col-6 col-md-3" th:each="populer : ${resepPopuler}">
+                            <a th:href="@{/resep/{id}(id=${populer.id})}" class="text-decoration-none">
+                                <div class="card card-resep h-100">
+                                    <img th:if="${populer.namaGambar != null}" th:src="@{'/uploaded-images/' + ${populer.namaGambar}}" class="card-img-top" style="height: 150px; object-fit: cover;" alt="Gambar Populer">
+                                    <img th:if="${populer.namaGambar == null}" th:src="@{/images/placeholder.png}" class="card-img-top" style="height: 150px; object-fit: cover;" alt="Placeholder">
+                                    <div class="card-body">
+                                        <h6 class="card-title text-dark" th:text="${populer.namaResep}">Nama Resep</h6>
+                                    </div>
+                                    <div class="card-footer text-muted">
+                                        <i class="fas fa-heart text-danger"></i>
+                                        <span th:text="${#lists.size(populer.likes)}">0</span> Suka
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                    <hr class="my-5">
+                </div>
+
+                <div class="container my-5" th:if="${!#lists.isEmpty(resepTerbaru)}">
+                    <h2 class="fw-bold mb-4">Resep Terbaru</h2>
+                    <div class="row g-4 justify-content-center">
+                        <div class="col-12 col-md-6 col-lg-3 mb-4" th:each="resep : ${resepTerbaru}">
+                            <div class="card h-100 card-resep">
+                                <a th:href="@{/resep/{id}(id=${resep.id})}">
+                                    <img th:if="${resep.namaGambar != null}" th:src="@{'/uploaded-images/' + ${resep.namaGambar}}" class="card-img-top" style="height: 200px; object-fit: cover;" alt="Gambar Resep">
+                                    <img th:if="${resep.namaGambar == null}" th:src="@{/images/placeholder.png}" class="card-img-top" style="height: 200px; object-fit: cover;" alt="Placeholder">
+                                </a>
+                                <div class="card-body d-flex flex-column">
+                                    <h5 class="card-title">
+                                        <a th:href="@{/resep/{id}(id=${resep.id})}" th:text="${resep.namaResep}" class="text-dark text-decoration-none">Nama Resep</a>
+                                    </h5>
+                                    <small class="text-muted mb-2">oleh <span th:text="${resep.user.username}">User</span></small>
+                                    <div class="mt-auto">
+                                        <span class="badge bg-primary" th:text="${resep.kategori.nama}">Kategori</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr class="my-5">
+                </div>
+
+                <div class="container my-5">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h3 class="fw-bold">Kategori</h3>
+                        <a th:href="@{/kategori/all}" class="text-decoration-none">Lihat Semua &rarr;</a>
+                    </div>
+                    <div class="row g-3 justify-content-center">
+                        <div class="col-6 col-md-3" th:each="cat : ${listKategori.subList(0, T(java.lang.Math).min(4, listKategori.size()))}">
+                            <a th:href="@{/kategori/{nama}(nama=${cat.nama})}" class="text-decoration-none">
+                                <div class="card card-resep h-100">
+                                    <img th:if="${cat.namaGambar != null}" th:src="@{'/uploaded-images/' + ${cat.namaGambar}}" class="card-img-top" style="height: 150px; object-fit: cover;" alt="Gambar Kategori">
+                                    <img th:if="${cat.namaGambar == null}" th:src="@{/images/placeholder.png}" class="card-img-top" style="height: 150px; object-fit: cover;" alt="Placeholder">
+                                    <div class="card-body">
+                                        <h6 class="card-title text-dark fw-bold" th:text="${cat.nama}">Nama Kategori</h6>
+                                    </div>
+                                    <div class="card-footer text-muted">
+                                        <i class="fas fa-book-open"></i>
+                                        <span th:text="${#lists.size(cat.resep)}">0</span> Resep
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div th:if="${#authorization.expression('isAnonymous()')}">
+                    <div class="modal fade" id="welcomeModal" tabindex="-1" aria-labelledby="welcomeModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered modal-lg">
+                            <div class="modal-content">
+                                <div class="modal-header border-0">
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body text-center p-5">
+                                    <h1 class="display-4 fw-bold">Selamat Datang di Dapoer-koe!</h1>
+                                    <p class="fs-4 text-muted">Temukan dan bagikan resep masakan terbaik Anda di sini. Mulai petualangan memasakmu sekarang!</p>
+                                    <a th:href="@{/register}" class="btn btn-primary btn-lg mt-3" type="button">
+                                        <i class="fas fa-user-plus me-2"></i>Daftar Sekarang, Gratis!
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </main>
+
+            <footer class="bg-dark text-white pt-5 pb-4">
+                <div class="container text-center text-md-start">
+                    <div class="row text-center text-md-start">
+                        <div class="col-md-3 col-lg-3 col-xl-3 mx-auto mt-3">
+                            <h5 class="text-uppercase mb-4 fw-bold text-warning">Dapoer-koe</h5>
+                            <p>Platform berbagi resep masakan rumahan dari berbagai penjuru.</p>
+                        </div>
+                        <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mt-3">
+                            <h5 class="text-uppercase mb-4 fw-bold text-warning">Resep</h5>
+                            <p><a href="#" class="footer-link">Populer</a></p>
+                            <p><a href="#" class="footer-link">Terbaru</a></p>
+                        </div>
+                        <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mt-3">
+                            <h5 class="text-uppercase mb-4 fw-bold text-warning">Kontak Kami</h5>
+                            <p><i class="fas fa-home me-3"></i> Bandung, Jawa Barat, Indonesia</p>
+                            <p><i class="fas fa-envelope me-3"></i> kontak@dapoerkoe.com</p>
+                        </div>
+                        <div class="col-md-3 col-lg-2 col-xl-2 mx-auto mt-3">
+                            <h5 class="text-uppercase mb-4 fw-bold text-warning">Ikuti Kami</h5>
+                            <div class="d-flex justify-content-center justify-content-md-start">
+                                <a href="#" class="footer-link me-4"><i class="fab fa-instagram fa-2x"></i></a>
+                                <a href="#" class="footer-link me-4"><i class="fab fa-whatsapp fa-2x"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <hr class="my-4">
+                    <div class="row align-items-center">
+                        <div class="col-md-12 text-center">
+                            <p>Copyright &copy; 2025 All rights reserved by: <a href="#" class="text-white text-decoration-none"><strong>Dapoer-koe</strong></a></p>
+                        </div>
+                    </div>
+                </div>
+            </footer>
         </div>
     </div>
-</div>
-<div th:replace="~{fragments :: footer-section}"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script th:src="@{/js/sidebar.js}"></script>
+
 </body>
+
 </html>

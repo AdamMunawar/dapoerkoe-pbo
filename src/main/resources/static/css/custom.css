@@ -95,3 +95,90 @@ a {
 .footer-link:hover {
     color: #ffffff; /* Warna link menjadi solid saat disentuh kursor */
 }
+
+/* =================================
+   GAYA UNTUK DETAIL RESEP
+   ================================= */
+
+/* Wadah untuk gambar dan tombol aksi */
+.image-container {
+    position: relative; /* Ini adalah jangkar untuk elemen absolut di dalamnya */
+    display: inline-block; /* Agar wadah pas dengan ukuran gambar */
+    width: 100%;
+}
+
+.image-container .img-fluid {
+    width: 100%;
+    height: auto;
+}
+
+/* Kelompok tombol aksi */
+.recipe-actions {
+    position: absolute; /* Membuatnya mengambang di atas parent */
+    bottom: 1rem; /* Jarak 1rem dari bawah */
+    right: 1rem;  /* Jarak 1rem dari kanan */
+    z-index: 10; /* Memastikan tombol selalu di atas gambar */
+    
+    /* Menata tombol-tombol di dalamnya */
+    display: flex;
+    gap: 0.5rem; /* Memberi jarak antar tombol */
+    
+    /* Memberi latar belakang agar mudah terlihat di atas gambar apa pun */
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    backdrop-filter: blur(4px); /* Efek blur untuk browser modern */
+}
+
+/* Sedikit style untuk tombol di dalam grup aksi */
+.recipe-actions .btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%; /* Membuat tombol menjadi bulat */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+/* =================================
+   5. UTILITY UNTUK MEMOTONG TEKS
+   ================================= */
+.truncate-2-lines {
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* Kunci utama: batasi teks hingga 2 baris */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    /* Menentukan tinggi minimal agar layout stabil */
+    min-height: 48px; /* Sesuaikan angka ini jika perlu (2 baris x tinggi per baris) */
+}
+/* =================================
+   GAYA UNTUK HERO CAROUSEL (Gaya Cookpad)
+   ================================= */
+
+/* Wadah utama carousel */
+.hero-carousel {
+    margin-bottom: 2rem; /* Memberi jarak dengan konten di bawahnya */
+}
+
+/* Mengatur tinggi setiap item slide */
+.hero-carousel .carousel-item {
+    height: 35vh; /* <-- DIKURANGI LAGI: Tinggi carousel hanya 35% dari tinggi layar */
+    min-height: 280px; /* <-- DIKURANGI LAGI: Tinggi minimal */
+    max-height: 350px; /* <-- DIKURANGI LAGI: Batas tinggi maksimal secara signifikan */
+}
+
+/* Mengatur agar gambar memenuhi area slide dengan rapi */
+.hero-carousel .carousel-item img {
+    height: 100%;
+    width: 100%;
+    object-fit: cover; /* Kunci utama: gambar akan terpotong (crop) agar pas, bukan menjadi gepeng */
+    filter: brightness(0.6); /* Membuat gambar sedikit lebih gelap agar teks lebih kontras dan mudah dibaca */
+}
+
+/* Mengatur posisi teks caption agar di tengah secara vertikal dan horizontal */
+.hero-carousel .carousel-caption {
+    top: 50%;
+    bottom: auto;
+    transform: translateY(-50%);
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7); /* Menambah bayangan pada teks */
+}

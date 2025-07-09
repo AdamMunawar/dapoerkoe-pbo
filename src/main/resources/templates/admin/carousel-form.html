@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="id" xmlns:th="http://www.thymeleaf.org">
+<head><title>Form Slide</title><link rel="stylesheet" href="https://bootswatch.com/5/minty/bootstrap.min.css"></head>
+<body>
+    <h1 th:text="${slide.id == null} ? 'Tambah Slide Baru' : 'Edit Slide'">Form Slide</h1>
+    <form th:action="@{/admin/carousel/simpan}" th:object="${slide}" method="post" enctype="multipart/form-data">
+        <input type="hidden" th:field="*{id}">
+        <div class="mb-3"><label class="form-label">Judul</label><input type="text" th:field="*{judul}" class="form-control"></div>
+        <div class="mb-3"><label class="form-label">Subjudul</label><input type="text" th:field="*{subjudul}" class="form-control"></div>
+        <div class="mb-3"><label class="form-label">Urutan Tampil</label><input type="number" th:field="*{urutanTampil}" class="form-control"></div>
+        <div class="mb-3 form-check"><input type="checkbox" th:field="*{aktif}" class="form-check-input"><label class="form-check-label">Aktifkan Slide Ini</label></div>
+        <div class="mb-3">
+            <label class="form-label">Gambar Slide</label>
+            <input type="file" name="fileGambar" class="form-control">
+            <small th:if="${slide.id != null}">Kosongkan jika tidak ingin mengubah gambar.</small>
+        </div>
+        <button type="submit" class="btn btn-primary">Simpan</button>
+    </form>
+</section>
+</body></html>

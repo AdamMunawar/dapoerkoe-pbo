@@ -14,7 +14,7 @@
     <h1>Atur Profil</h1>
     <p>Halo, <strong th:text="${user.username}"></strong>!</p>
     <a th:href="@{/}" class="btn btn-secondary mb-4">Kembali ke Halaman Utama</a>
-    
+    <a th:href="@{/profile/resep-disimpan}" class="btn btn-primary">Lihat Resep yang Disimpan</a>
     <div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}"></div>
     <div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
 
@@ -54,6 +54,6 @@
         </div>
     </div>
 </div>
-<div th:replace="~{fragments :: footer-section}"></div>
+
 </body>
 </html>

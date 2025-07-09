@@ -33,6 +33,9 @@ import java.io.IOException;
 import org.springframework.beans.factory.annotation.Value;
 import java.nio.file.*;
 import java.util.UUID;
+import com.dapoerkoe.manajemen_resep.model.HeroCarouselSlide;
+import com.dapoerkoe.manajemen_resep.service.HeroCarouselSlideService;
+
 
 
 
@@ -56,8 +59,14 @@ public class AdminController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-     @Autowired private KategoriService kategoriService;
-    @Autowired private ResepService resepService;
+    @Autowired 
+    private KategoriService kategoriService;
+
+    @Autowired 
+    private ResepService resepService;
+
+    @Autowired
+    private HeroCarouselSlideService carouselService;
 
 
     @GetMapping("/dashboard")
@@ -130,6 +139,34 @@ public String adminDashboard() {
         kategoriRepository.deleteById(id);
         return "redirect:/admin/kategori";
     }
+
+    // === MANAJEMEN HERO CAROUSEL ===
+    @GetMapping("/carousel")
+    public String listCarouselSlides(Model model){
+        model.addAttribute("slides", carouselService.findAll());
+        return "admin/carousel-list";
+    }
+    @GetMapping("/carousel/tambah")
+    public String showCarouselForm (Model model){
+        model.addAttribute("slide", new HeroCarouselSlide());
+        return "admin/carousel-form";
+    }
+    @GetMapping("/carousel/edit/{id}")
+    public String showEditCarouselForm (@PathVariable Long id, Model model){
+        model.addAttribute("slide", carouselService.findById(id));
+        return "admin/carousel-form";
+    }
+    @PostMapping("/carousel/simpan")
+    public String saveCarouselSlide(@ModelAttribute HeroCarouselSlide slide, @RequestParam ("fileGambar") MultipartFile fileGambar) throws IOException{
+        carouselService.save(slide, fileGambar);
+        return "redirect:/admin/carousel";
+    }
+     @GetMapping("/carousel/hapus/{id}")
+    public String deleteCarouselSlide(@PathVariable Long id) {
+        carouselService.deleteById(id);
+        return "redirect:/admin/carousel";
+    }
+    
      // === MANAJEMEN PENGGUNA ===
     @GetMapping("/users/hapus/{id}")
     public String deleteUser(@PathVariable("id") Long id, @AuthenticationPrincipal UserDetails currentUser) {

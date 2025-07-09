@@ -1,15 +1,15 @@
 document.addEventListener('DOMContentLoaded', function() {
     const likeButton = document.getElementById('like-button');
-    if (!likeButton) return; // Keluar jika tombol tidak ditemukan
+    if (!likeButton) return; // Keluar jika tombol tidak ada
 
-    // Ambil CSRF token dari meta tag yang ada di HTML
+    const likeCountSpan = document.getElementById('like-count'); // Ambil elemen untuk jumlah suka
     const token = document.querySelector('meta[name="_csrf"]').getAttribute('content');
     const header = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
 
     likeButton.addEventListener('click', function() {
         const resepId = this.getAttribute('data-resep-id');
-        
-        // Siapkan header untuk permintaan POST
+        const icon = this.querySelector('i');
+
         const headers = new Headers();
         headers.append(header, token);
 
@@ -18,18 +18,30 @@ document.addEventListener('DOMContentLoaded', function() {
             headers: headers
         })
         .then(response => {
-            if (response.ok) {
-                // Jika berhasil, refresh halaman untuk melihat perubahan
-                window.location.reload(); 
-            } else {
-                // Jika gagal (misal: belum login), beri peringatan
-                alert('Anda harus login untuk menyukai resep ini.');
-                window.location.href = '/login';
+            if (!response.ok) {
+                throw new Error('Gagal melakukan aksi Suka. Mungkin Anda belum login.');
             }
+            return response.json();
+        })
+        .then(data => {
+            // 'data' adalah respons dari LikeController, contoh: { "liked": true, "likeCount": 5 }
+
+            // 1. Update ikon tombol
+            if (data.liked) {
+                icon.classList.remove('far'); // Hapus ikon hati kosong
+                icon.classList.add('fas', 'text-danger'); // Tambah ikon hati penuh + warna merah
+            } else {
+                icon.classList.remove('fas', 'text-danger'); // Hapus ikon hati penuh + warna
+                icon.classList.add('far'); // Tambah ikon hati kosong
+            }
+
+            // 2. Update teks jumlah suka
+            likeCountSpan.textContent = data.likeCount + ' Suka';
         })
         .catch(error => {
-            console.error('Error saat melakukan like:', error);
-            alert('Gagal terhubung ke server.');
+            console.error('Error:', error);
+            alert('Anda harus login untuk menyukai resep ini.');
+            window.location.href = '/login';
         });
     });
 });
