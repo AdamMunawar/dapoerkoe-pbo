@@ -42,7 +42,7 @@ Database: H2 (untuk pengembangan), MySQL (untuk produksi)
 
 Styling & UI: Bootstrap 5, Bootswatch (Tema Minty)
 
-Library Tambahan: Lombok, Font Awesome, Chart.js, DataTables.js
+Library Tambahan: Lombok, Font Awesome,dll
 
 # 🎨 Tampilan Aplikasi
 
