@@ -1,4 +1,11 @@
 # 🍳 Dapoer-koe: Aplikasi Web Manajemen Resep
+Dalam Rangka Memenuhi UAS Pemorograman Berorientasi Objek
+Dosen Pengampu : Aldy Rialdy Atmadja, M.T
+PBO Kelas C-Kelompok 12 :
+1. Muhammad Adam Sirojuddin Munawar
+2. Muhammad Raditya Raihan
+3. Sayyid Maula Rafsanjani
+   
 Dapoer-koe adalah aplikasi web full-stack yang dibangun menggunakan Java dan Spring Boot. Aplikasi ini berfungsi sebagai platform bagi pengguna untuk membagikan, menemukan, dan mengelola resep masakan. Proyek ini dirancang dengan arsitektur modern, menerapkan prinsip-prinsip desain SOLID, dan dilengkapi dengan berbagai fitur interaktif.
 
 # ✨ Fitur Utama
