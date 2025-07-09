@@ -1,6 +1,6 @@
 # 🍳 Dapoer-koe: Aplikasi Web Manajemen Resep
 
-Dalam Rangka Memenuhi UAS Pemorograman Berorientasi Objek
+Dalam Rangka Memenuhi UAS Pemrograman Berorientasi Objek
 
 Dosen Pengampu : Aldy Rialdy Atmadja, M.T
 
